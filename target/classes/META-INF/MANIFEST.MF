@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Vendor: Pivotal Software, Inc.
+Implementation-Title: SessionManager
+Implementation-Version: 0.0.1
+Implementation-Vendor-Id: de.douglas.springboot
+Build-Jdk: 1.7.0_45
+Built-By: zzzz
+Created-By: Maven Integration for Eclipse
+Implementation-URL: http://projects.spring.io/spring-boot/SessionManag
+ er/
+
