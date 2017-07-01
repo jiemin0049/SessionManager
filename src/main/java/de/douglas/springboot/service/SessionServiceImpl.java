@@ -7,7 +7,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.View;
 
 import de.douglas.springboot.model.DouglasSession;
 
@@ -74,4 +78,16 @@ public class SessionServiceImpl implements SessionService {
       s.setExpiration(true);
     }
   }
+
+  @Override
+  public String redirectTo(HttpServletRequest request, String path) {
+    String rd = addPath(request, path);
+    return rd;
+  }
+
+  private String addPath(HttpServletRequest request, String path) {
+    request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.MOVED_PERMANENTLY);
+    return "redirect:/" + path;
+  }
+
 }

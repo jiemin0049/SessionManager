@@ -3,6 +3,8 @@ package de.douglas.springboot.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import de.douglas.springboot.model.DouglasSession;
 
 public interface SessionService {
@@ -22,5 +24,7 @@ public interface SessionService {
   void expireSession(String id);
 
   void expireAllSessions();
+
+  String redirectTo(HttpServletRequest request, String finalPath);
 
 }

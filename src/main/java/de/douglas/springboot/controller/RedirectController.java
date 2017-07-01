@@ -7,23 +7,31 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
+import de.douglas.springboot.service.SessionService;
+
 /**
- * If a request e.g. /douglas/xxxxx/xxxx/xxx.. or /douglas/abc.html?id=1&name=username&... 
- * The prefix /douglas/ must be cut off, and the cutting link will be redirected to other controller. 
+ * If a request e.g. /douglas/xxxxx/xxxx/xxx.. or /douglas/abc.html?id=1&name=username&... The prefix /douglas/ must be cut off, and the cutting link will be
+ * redirected to other controller.
  * 
  * This redirect class can ONLY be used for request method GET.
  */
 @Controller
 public class RedirectController {
+
+  @Autowired
+  SessionService sessionService;
 
   /**
    * Using response to redirect,here redirect response is HTTP status code 302.
@@ -32,7 +40,7 @@ public class RedirectController {
    *
    * @param request
    */
-  @RequestMapping(value = "/douglas/**", method = RequestMethod.GET)
+  @RequestMapping(value = "/douglas0/**", method = RequestMethod.GET)
   public void redirectRequest0(HttpServletRequest request, HttpServletResponse response) {
     String servletPath = request.getServletPath();
     AntPathMatcher apm = new AntPathMatcher();
@@ -63,7 +71,7 @@ public class RedirectController {
    *
    * @param request
    */
-  @RequestMapping(value = "/douglas/**", method = RequestMethod.GET)
+  @RequestMapping(value = "/douglas1/**", method = RequestMethod.GET)
   public void redirectRequest1(HttpServletRequest request, HttpServletResponse response) {
     String servletPath = request.getServletPath();
     AntPathMatcher apm = new AntPathMatcher();
@@ -90,7 +98,7 @@ public class RedirectController {
    *
    * @param request
    */
-  @RequestMapping(value = "/douglas/**", method = RequestMethod.GET)
+  @RequestMapping(value = "/douglas2/**", method = RequestMethod.GET)
   public ModelAndView redirectRequest2(HttpServletRequest request) {
     String servletPath = request.getServletPath();
     AntPathMatcher apm = new AntPathMatcher();
@@ -111,7 +119,7 @@ public class RedirectController {
    *
    * @param request
    */
-  @RequestMapping(value = "/douglas/**", method = RequestMethod.GET)
+  @RequestMapping(value = "/douglas3/**", method = RequestMethod.GET)
   public void redirectRequest3(HttpServletRequest request, HttpServletResponse response) {
     String servletPath = request.getServletPath();
     AntPathMatcher apm = new AntPathMatcher();
@@ -127,4 +135,44 @@ public class RedirectController {
       e.printStackTrace();
     }
   }
+
+  /**
+   * Using request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.MOVED_PERMANENTLY)
+   * set redirect status code 301.
+   * 
+   * Since Spring 4.0 ?
+   * 
+   * http://localhost:8080/SessionManager/douglas4/hello
+   * 
+   */
+  @RequestMapping(value = "/douglas4/**", method = RequestMethod.GET)
+  public String redirectRequest4(HttpServletRequest request) {
+    String servletPath = request.getServletPath();
+    AntPathMatcher apm = new AntPathMatcher();
+    // Get RequestMapping value string, here get "/douglas/**"
+    String matchPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+    // Cut off prefix "/douglas/**"
+    String finalPath = apm.extractPathWithinPattern(matchPattern, servletPath);
+    return sessionService.redirectTo(request, finalPath);
+  }
+  
+  /**
+   * Using annotation to set redirect status code 301.
+   * 
+   * http://localhost:8080/SessionManager/douglas5/hello
+   * 
+   */
+  @RequestMapping(value = "/douglas5/**", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
+  public String redirectRequest5(HttpServletRequest request) {
+    String servletPath = request.getServletPath();
+    AntPathMatcher apm = new AntPathMatcher();
+    // Get RequestMapping value string, here get "/douglas/**"
+    String matchPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+    // Cut off prefix "/douglas/**"
+    String finalPath = apm.extractPathWithinPattern(matchPattern, servletPath);
+    return "redirect:/" + finalPath;
+  }
+  
+
 }
