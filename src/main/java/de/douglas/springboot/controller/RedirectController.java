@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import de.douglas.springboot.service.SessionService;
 
 /**
- * If a request e.g. /douglas/xxxxx/xxxx/xxx.. or /douglas/abc.html?id=1&name=username&... The prefix /douglas/ must be cut off, and the cutting link will be
- * redirected to other controller.
+ * If a request e.g. /douglas/xxxxx/xxxx/xxx.. or /douglas/abc.html?id=1&name=username&... 
+ * The prefix /douglas/ must be cut off, and the cutting link will be redirected to other controller.
  * 
  * This redirect class can ONLY be used for request method GET.
  */
@@ -37,6 +36,8 @@ public class RedirectController {
    * Using response to redirect,here redirect response is HTTP status code 302.
    * 
    * The parameters can not send automatically, must send with link?key=value&key=value...
+   * 
+   * http://localhost:8080/SessionManager/douglas0/hello
    *
    * @param request
    */
@@ -158,6 +159,8 @@ public class RedirectController {
   
   /**
    * Using annotation to set redirect status code 301.
+   * 
+   * Since Spring 4.0 ?
    * 
    * http://localhost:8080/SessionManager/douglas5/hello
    * 
