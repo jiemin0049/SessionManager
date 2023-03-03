@@ -65,6 +65,23 @@ public class SessionManagerController {
     String id = sessionService.createSession(attributeMap);
     return new ResponseEntity<String>(id, HttpStatus.CREATED);
   }
+  
+    /**
+   * Create a session, the created session id is shown response body.
+   * 
+   * @param session
+   *          new session.
+   * @return
+   */
+  @RequestMapping(method = RequestMethod.POST)
+  public ResponseEntity<String> createSession2(@RequestBody Map<String, String> attributeMap) {
+    String id = sessionService.createSession(attributeMap);
+    URI location = ServletUriComponetsBuilder.fromCurrentRequest()
+                    .path("{id}")
+                    .buildAndExpand(id)
+                    .toUri();
+    return ResponseEntity.created(location).build();
+  }
 
   /**
    * Delete a session.
